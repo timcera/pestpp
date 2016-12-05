@@ -48,7 +48,7 @@ private:
 	Jacobian_1to1 jco;
 	OutputFileWriter of_wr;
 
-	vector<double> probit_inputs = { 0.0010,0.0100,0.0200,0.0300,0.0400,0.0500,0.0600,0.0700,0.0800,0.0900,
+	/*vector<double> probit_inputs = { 0.0010,0.0100,0.0200,0.0300,0.0400,0.0500,0.0600,0.0700,0.0800,0.0900,
 		0.1000,0.1100,0.1200,0.1300,0.1400,0.1500,0.1600,0.1700,0.1800,0.1900,
 		0.2000,0.2100,0.2200,0.2300,0.2400,0.2500,0.2600,0.2700,0.2800,0.2900,
 		0.3000,0.3100,0.3200,0.3300,0.3400,0.3500,0.3600,0.3700,0.3800,0.3900,
@@ -67,13 +67,19 @@ private:
 		0.2533,0.2793,0.3055,0.3319,0.3585,0.3853,0.4125,0.4399,0.4677,0.4959,
 		0.5244,0.5534,0.5828,0.6128,0.6433,0.6745,0.7063,0.7388,0.7722,0.8064,
 		0.8416,0.8779,0.9154,0.9542,0.9945,1.0364,1.0803,1.1264,1.1750,1.2265,
-		1.2816,1.3408,1.4051,1.4758,1.5548,1.6449,1.7507,1.8808,2.0537,3.0902 };
+		1.2816,1.3408,1.4051,1.4758,1.5548,1.6449,1.7507,1.8808,2.0537,3.0902 };*/
+
+	vector<double> probit_inputs;
+	vector<double> probit_outputs;
 
 
-	map<ClpSimplex::Status, string> status_name_map = { {ClpSimplex::Status::atLowerBound,"at lower bound"},
+	/*map<ClpSimplex::Status, string> status_name_map = { {ClpSimplex::Status::atLowerBound,"at lower bound"},
 	{ ClpSimplex::Status::atUpperBound,"at upper bound"},{ClpSimplex::Status::basic,"basic"},
-	{ ClpSimplex::Status::isFree,"free"},{ ClpSimplex::Status::isFixed,"fixed"}};
+	{ ClpSimplex::Status::isFree,"free"},{ ClpSimplex::Status::isFixed,"fixed"}};*/
 		
+	map<ClpSimplex::Status, string> status_name_map;
+
+
 	map<string, double> obj_func_coef_map;
 	map<string, ConstraintSense> constraint_sense_map;
 	map <string, string> constraint_sense_name;
