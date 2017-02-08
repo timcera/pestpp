@@ -245,8 +245,9 @@ int main(int argc, char* argv[])
 		}
 
 		ofstream &fout_rec = file_manager.rec_ofstream();
-		PerformanceLog performance_log(file_manager.open_ofile_ext("pfm"));
-
+		//PerformanceLog performance_log(file_manager.open_ofile_ext("pfm"));
+	    PerformanceLog performance_log(file_manager.open_ofile_ext("plog"));
+		
 		if (!restart_flag || save_restart_rec_header)
 		{
 			fout_rec << "             PEST++ Version " << version << endl << endl;
@@ -701,7 +702,8 @@ int main(int argc, char* argv[])
 				fout_rec << "WARNING: PEST++ 'autonorm' option != 0.0. This can greatly effect the outcome " << endl;
 				fout_rec << "         of the following analyses, which depend heavily on the Jacobian" << endl;
 			}
-			ofstream &pfm = file_manager.get_ofstream("pfm");
+			//ofstream &pfm = file_manager.get_ofstream("pfm");
+			ofstream &pfm = performance_log.fout;
 			pfm << endl << endl << "-----------------------------------" << endl;
 			pfm << "starting linear uncertainty analyses" << endl;
 			pfm << "-----------------------------------" << endl << endl;
