@@ -56,6 +56,15 @@ fig = plt.figure(figsize=(17.15/2.54,10.15/2.54))
 ax = plt.axes([0.05,0.075,0.7,0.9])
 cax = plt.axes([0.75,0.075,0.025,0.9])
 i = ax.imshow(harray,interpolation="nearest",alpha=0.5,extent=ml.sr.get_extent())
+jet = plt.cm.jet
+jet.set_bad(alpha=0.0)
+harray_bc = harray.copy()
+harray_bc[1:-1,:] = np.NaN
+ax.imshow(harray_bc,interpolation="nearest",extent=ml.sr.get_extent(),cmap=jet)
+
+#i = ax.pcolormesh(ml.sr.xcentergrid,ml.sr.ycentergrid,harray,facecolor="none",edgecolor='k')
+
+
 c = plt.colorbar(i,cax=cax)
 c.set_label("water level (m)",labelpad=0.1)
 
@@ -86,12 +95,16 @@ ax.scatter(reach_data_const.x,reach_data_const.y,marker='^',s=15,color='k',zorde
 for i,(x,y) in enumerate(zip(reach_data_const.x,reach_data_const.y)):
     t = ax.text(x+10,y+10,"c{0}".format(i+1),ha="left",va="bottom")
     t.set_bbox(dict(color='w', edgecolor='none',pad=0.0))
+
+ax.text(3000,100,"constant head cells",ha="center",va="center",fontsize=10)
+ax.text(3000,4900,"constant head cells",ha="center",va="center",fontsize=10)
+
 xmn,xmx,ymn,ymx = ml.sr.get_extent()
 ax.set_xlim(xmn,xmx)
 ax.set_ylim(ymn,ymx)
 #plt.tight_layout()
 plt.savefig("supply2.pdf")
-
+#plt.show()
 
 
 
