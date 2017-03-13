@@ -854,9 +854,12 @@ ModelRun SVDSolver::iteration_reuse_jac(RunManagerAbstract &run_manager, Termina
 
 	if (!res_filename.empty())
 	{
-		Observations temp;
+		Observations temp_obs;
 		string rfile = res_filename;
-		read_res(rfile, temp);
+		read_res(rfile, temp_obs);
+		Parameters temp_pars = new_base_run.get_ctl_pars();
+		new_base_run.update_ctl(temp_pars, temp_obs);
+		rerun_base = false;
 	}
 
 	if (rerun_base)
