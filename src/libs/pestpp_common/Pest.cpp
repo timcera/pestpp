@@ -157,15 +157,22 @@ void Pest::check_inputs(ostream &f_rec)
 	{
 		if (pestpp_options.get_mat_inv() == PestppOptions::MAT_INV::Q12J)
 		{
+			f_rec << "pest++ mat_inv = q12j, but parcov_scale_fac > 0.0." << endl;
 			throw PestError("pest++ mat_inv = q12j, but parcov_scale_fac > 0.0.");
 		}
 		if (pestpp_options.get_parcov_scale_fac() > 1.0)
 		{
 			cout << "'parcov_scale_fac' > 1.0, resetting to 1.0" << endl;
+			f_rec << "'parcov_scale_fac' > 1.0, resetting to 1.0" << endl;
 			pestpp_options.set_parcov_scale_fac(1.0);
 		}
-
 	}
+	if (pestpp_options.get_hotstart_resfile().size() > 0)
+		if (pestpp_options.get_basejac_filename().size() == 0)
+		{
+			cout << "'base_jacobian' is none, so 'hotstart_resfile' being ignored..." << endl;
+			f_rec << "'base_jacobian' is none, so 'hotstart_resfile' being ignored..." << endl;
+		}		
 }
 
 void Pest::check_io()
@@ -594,6 +601,7 @@ int Pest::process_ctl_file(ifstream &fin, string pst_filename)
 	pestpp_options.set_sweep_chunk(500);
 	//pestpp_options.set_use_parcov_scaling(false);
 	pestpp_options.set_parcov_scale_fac(-999.0);
+	pestpp_options.set_jac_scale(true);
 	pestpp_options.set_opt_obj_func("");
 	pestpp_options.set_opt_coin_log(true);
 	pestpp_options.set_opt_dec_var_groups(vector<string>());
@@ -603,6 +611,7 @@ int Pest::process_ctl_file(ifstream &fin, string pst_filename)
 	pestpp_options.set_opt_direction(1.0);
 	pestpp_options.set_opt_iter_tol(0.001);
 	pestpp_options.set_opt_recalc_fosm_every(1);
+	pestpp_options.set_hotstart_resfile(string());
 	for(vector<string>::const_iterator b=pestpp_input.begin(),e=pestpp_input.end();
 		b!=e; ++b) {
 			

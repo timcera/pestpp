@@ -105,6 +105,3 @@ ax.set_ylim(ymn,ymx)
 #plt.tight_layout()
 plt.savefig("supply2.pdf")
 #plt.show()
-
-
-

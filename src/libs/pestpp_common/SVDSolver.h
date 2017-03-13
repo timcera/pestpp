@@ -75,7 +75,7 @@ public:
 	virtual ModelRun compute_jacobian(RunManagerAbstract &run_manager, TerminationController &termination_ctl, ModelRun &cur_run, bool restart_runs = false);
 	virtual ModelRun solve(RunManagerAbstract &run_manager, TerminationController &termination_ctl, int max_iter, ModelRun &cur_run,
 		ModelRun &optimum_run, RestartController &restart_controller, bool calc_first_jacobian = true);
-	virtual ModelRun iteration_reuse_jac(RunManagerAbstract &run_manager, TerminationController &termination_ctl, ModelRun &base_run, bool rerun_base = true, const std::string &filename = "");
+	virtual ModelRun iteration_reuse_jac(RunManagerAbstract &run_manager, TerminationController &termination_ctl, ModelRun &base_run, bool rerun_base = true, const std::string &jco_filename = "",const std::string &res_filename="");
 	virtual void iteration_jac(RunManagerAbstract &run_manager, TerminationController &termination_ctl, ModelRun &base_run, bool calc_init_obs = false, bool restart_runs = false);
 	virtual ModelRun iteration_upgrd(RunManagerAbstract &run_manager, TerminationController &termination_ctl, ModelRun &base_run, bool restart_runs = false);
 	virtual void set_svd_package(PestppOptions::SVD_PACK _svd_pack);
@@ -100,6 +100,7 @@ protected:
 	const static string svd_solver_type_name;
 	SVDPackage *svd_package;
 	MAT_INV mat_inv;
+	MarquardtMatrix mar_mat;
 	const string description;
 	const ControlInfo *ctl_info;
 	SVDInfo svd_info;
@@ -120,6 +121,7 @@ protected:
 	OutputFileWriter &output_file_writer;
 	PerformanceLog *performance_log;
 	std::vector<double> base_lambda_vec;
+	std::vector<double> lambda_scale_vec;
 	bool terminate_local_iteration;
 	bool der_forgive;
 	double reg_frac;
@@ -136,7 +138,10 @@ protected:
 		double &rel_change);
 	void calc_upgrade_vec(double i_lambda, Parameters &frozen_ctl_pars, QSqrtMatrix &Q_sqrt, const DynamicRegularization &regul,
 		Eigen::VectorXd &residuals_vec, vector<string> &obs_names_vec, const Parameters &base_run_ctl_pars,
-		Parameters &new_ctl_pars, MarquardtMatrix marquardt_type, bool scale_upgrade=false);
+		Parameters &new_ctl_pars, MarquardtMatrix marquardt_type, LimitType &limit_type, bool scale_upgrade=false);
+	void calc_upgrade_vec_freeze(double i_lambda, Parameters &frozen_ctl_pars, QSqrtMatrix &Q_sqrt, const DynamicRegularization &regul,
+		Eigen::VectorXd &residuals_vec, vector<string> &obs_names_vec, const Parameters &base_run_ctl_pars,
+		Parameters &new_ctl_pars, MarquardtMatrix marquardt_type, bool scale_upgrade = false);
 	void calc_lambda_upgrade_vecQ12J(const Jacobian &jacobian, const QSqrtMatrix &Q_sqrt, const DynamicRegularization &regul,
 		const Eigen::VectorXd &Residuals, const vector<string> &obs_name_vec,
 		const Parameters &base_active_ctl_pars, const Parameters &freeze_active_ctl_pars,
