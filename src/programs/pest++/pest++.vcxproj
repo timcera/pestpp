@@ -74,7 +74,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
-    <UseIntelMKL>Parallel</UseIntelMKL>
+    <UseIntelMKL>Sequential</UseIntelMKL>
     <PlatformToolset>Intel C++ Compiler 17.0</PlatformToolset>
     <UseILP64Interfaces>true</UseILP64Interfaces>
   </PropertyGroup>
@@ -269,7 +269,8 @@
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalOptions>/D_WIN32_WINNT=0x0600 %(AdditionalOptions)</AdditionalOptions>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <OpenMP>GenerateParallelCode</OpenMP>
+      <OpenMP>None</OpenMP>
+      <ExceptionHandling>Sync</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
