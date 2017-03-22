@@ -280,7 +280,7 @@ int Pest::process_ctl_file(ifstream &fin, string pst_filename)
 		}
 		else if (line_upper.substr(0,2) == "++")
 		{
-			pestpp_input.push_back(line_upper);
+			pestpp_input.push_back(line);
 		}
 			
 		else if (line_upper[0] == '*')
@@ -604,6 +604,7 @@ int Pest::process_ctl_file(ifstream &fin, string pst_filename)
 	pestpp_options.set_jac_scale(true);
 	pestpp_options.set_opt_obj_func("");
 	pestpp_options.set_opt_coin_log(true);
+	pestpp_options.set_opt_skip_final(false);
 	pestpp_options.set_opt_dec_var_groups(vector<string>());
 	pestpp_options.set_opt_ext_var_groups(vector<string>());
 	pestpp_options.set_opt_constraint_groups(vector<string>());

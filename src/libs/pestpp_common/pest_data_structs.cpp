@@ -286,6 +286,14 @@ ostream& operator<< (ostream &os, const PestppOptions& val)
 	{
 		os << right << setw(15) << lam << endl;
 	}
+	if (!val.get_basejac_filename().empty())
+	{
+		os << "   restarting with existing jacobian matrix file: " << val.get_basejac_filename() << endl;
+		if (!val.get_hotstart_resfile().empty())
+		{
+			os << "   and using existing residual file " << val.get_hotstart_resfile() << " to forego initial model run" << endl;
+		}
+	}
 	if (val.get_uncert_flag())
 	{
 		os << "    using FOSM-based uncertainty estimation for parameters" << endl;
@@ -346,13 +354,15 @@ void PestppOptions::parce_line(const string &line)
 	}
 	string tmp_line = line.substr(0, found);
 	strip_ip(tmp_line, "both", "\t\n\r+ ");
-	upper_ip(tmp_line);
+	//upper_ip(tmp_line);
 
 
 	for (std::sregex_iterator i(tmp_line.begin(), tmp_line.end(), lambda_reg); i != end_reg; ++i)
 	{
 		string key = (*i)[1];
-		string value = (*i)[2];
+		string org_value = (*i)[2];
+		upper_ip(key);
+		string value = upper_cp(org_value);
 
 		if (key=="MAX_N_SUPER"){
 			convert_ip(value, max_n_super); 
@@ -448,17 +458,17 @@ void PestppOptions::parce_line(const string &line)
 		else if ((key == "PARCOV") || (key == "PARAMETER_COVARIANCE") 
 			|| (key == "PARCOV_FILENAME"))
 		{
-			convert_ip(value, parcov_filename);
+			convert_ip(org_value, parcov_filename);
 		}
 
 		else if ((key == "BASE_JACOBIAN") || (key == "BASE_JACOBIAN_FILENAME"))
 		{
-			convert_ip(value, basejac_filename);
+			convert_ip(org_value, basejac_filename);
 		}
 
 		else if (key == "HOTSTART_RESFILE")
 		{
-			convert_ip(value, hotstart_resfile);
+			convert_ip(org_value, hotstart_resfile);
 		}
 
 		else if (key == "OVERDUE_RESCHED_FAC"){
@@ -468,10 +478,10 @@ void PestppOptions::parce_line(const string &line)
 			convert_ip(value, overdue_giveup_fac);
 		}
 		else if (key == "SWEEP_PARAMETER_CSV_FILE")
-			convert_ip(value, sweep_parameter_csv_file);
+			convert_ip(org_value, sweep_parameter_csv_file);
 		
 		else if (key == "SWEEP_OUTPUT_CSV_FILE")
-			convert_ip(value, sweep_output_csv_file);
+			convert_ip(org_value, sweep_output_csv_file);
 		else if (key == "SWEEP_CHUNK")
 			convert_ip(value, sweep_chunk);
 		else if (key == "SWEEP_FORGIVE")
@@ -544,7 +554,13 @@ void PestppOptions::parce_line(const string &line)
 			istringstream is(value);
 			is >> boolalpha >> opt_coin_log;
 		}
-	
+		else if (key == "OPT_SKIP_FINAL")
+		{
+			transform(value.begin(), value.end(), value.begin(), ::tolower);
+			istringstream is(value);
+			is >> boolalpha >> opt_skip_final;
+		}
+
 		else if ((key == "OPT_DEC_VAR_GROUPS") || (key == "OPT_DECISION_VARIABLE_GROUPS"))
 		{
 			opt_dec_var_groups.clear();
