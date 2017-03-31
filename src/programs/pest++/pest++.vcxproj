@@ -271,6 +271,8 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OpenMP>None</OpenMP>
       <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointExceptions>true</FloatingPointExceptions>
+      <FloatingPointModel>Strict</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
